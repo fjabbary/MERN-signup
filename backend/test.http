@@ -1,9 +1,16 @@
-POST http://localhost:4000/app/signup
+# POST http://localhost:4000/app/signup
+# Content-Type: application/json
+
+# {
+#     "fullName": "John Doe",
+#     "username": "jonhd",
+#     "email": "john@gmail.com",
+#     "password": "4rf4"
+# }
+
+DELETE http://localhost:4000/app/delete
 Content-Type: application/json
 
 {
-    "fullName": "John Doe",
-    "username": "jonhd",
-    "email": "john@gmail.com",
-    "password": "4rf4"
+    "id": "5fee386cefb13c30fcc39d49"
 }

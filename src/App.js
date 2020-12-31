@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import axios from 'axios'
+import Item from './Item'
 
 export default class App extends Component {
 
@@ -13,11 +14,33 @@ export default class App extends Component {
             username: '',
             email: '',
             password: '',
-            isSubmitted: ''
+            isSubmitted: '',
+            users: []
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+
+    componentDidMount() {
+        axios.get('http://localhost:4000/app/grab')
+            .then(response => {
+                this.setState({
+                    users: response.data
+                })
+            })
+    }
+
+
+    // componentDidUpdate(prevProps, prevState) {
+
+    //     axios.get('http://localhost:4000/app/grab')
+    //         .then(response => {
+    //             this.setState({
+    //                 users: response.data
+    //             })
+    //         })
+    // }
+
 
     handleChange = (e) => {
         this.setState({
@@ -38,13 +61,29 @@ export default class App extends Component {
 
         axios.post('http://localhost:4000/app/signup', newUser).then(response => {
             this.setState({
+                fullName: '',
+                username: '',
+                email: '',
+                password: '',
                 isSubmitted: 'Form submitted'
             })
+
+            setTimeout(() => {
+
+                this.setState({
+                    isSubmitted: ''
+                })
+            }, 2000)
         })
+
+        window.location.reload();
+
     }
 
     render() {
-        const { fullName, username, email, password } = this.state
+        const { fullName, username, email, password, users } = this.state
+        const userJSX = users.map(user => <Item user={user} key={user._id} />)
+
 
         return (
             <div>
@@ -64,8 +103,13 @@ export default class App extends Component {
                             <input type="password" className="form-control" placeholder="Password..." name="password" value={password} onChange={this.handleChange} />
                         </div>
 
-                        <button className="btn btn-warning btn-block">Submit</button>
+                        <button className="btn btn-warning btn-block" disabled={!fullName || !username || !email || !password}>Submit</button>
                     </form>
+
+
+                    <ul className="list-group mt-5">
+                        {userJSX}
+                    </ul>
                 </div>
             </div>
         )
